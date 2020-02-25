@@ -8,6 +8,7 @@ dict = {}
 
 
 def lookup(query):
+
     try:
         ip = dict[query]
         return ip

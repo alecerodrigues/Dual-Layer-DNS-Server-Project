@@ -46,6 +46,10 @@ def client():
     hostname = args[1]
     rs.sendall(hostname.encode())
 
+    #Recieve response to Client
+    dataResponse = rs.recv(100)
+    print("IP address: " + dataResponse)
+
     # close the client socket
     ts.close()
     rs.close()

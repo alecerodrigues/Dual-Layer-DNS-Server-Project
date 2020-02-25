@@ -9,33 +9,59 @@ dict = {}
 
 
 def lookup(query):
+    """
+    This function takes the DNS being queried in the form of a string and checks to see if it has a corresponding value
+        in the dictionary hash map
+    :param query: str   -   The DNS being looked up
+    :return: str    -   The return is either the ip and flag for the corresponding DNS or the query itself to indicate
+                    no match
+    """
     try:
         ip = dict[query]
-        return ip
+        return query + ' ' + ip
     except:
-        return query
+        return 'none'
 
 
 def populateTable():
-
+    """
+    This function populates the DNS table from a text file. ALl table inputs are in one of two string formats:
+        1. hostname ip-address flag
+        2. hostname - NS-flag
+    :return: null
+    """
     dnstablefile = open("PROJI-DNSRS.txt", "r")
     dnstable = dnstablefile.readlines()
+    temptsHostName = ""
     for i in dnstable:
         temp = i.split()
-        try:
+        # try:
+        if temp [1] == '-':
+            temptsHostName = temp[0] + " - " + temp[2]
+        else:
             dict[temp[0]] = (temp[1] + ' ' + temp[2])
-        except:
-            dict[temp[0]] = (temp[1])
-    return
+
+        # except:
+        #     temptsHostName = temp[0] + " - " + temp[1]
+        #     dict[temp[0]] = (temp[1])
+    return temptsHostName
 
 
 def portnum():
+    """
+    This function is used to parse the port number argument from the console command.
+    :return: int    -   The return is an integer that represents teh port number to bind to the port
+    """
     fullargs = sys.argv
     arglist = fullargs[1]
     return int(arglist)
 
 
 def rserver():
+    """
+    This function starts the root server and performs the DNS lookups.
+    :return: null
+    """
     try:
         ss = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         print("[S]: RServer socket created")
@@ -43,7 +69,8 @@ def rserver():
         print('socket open error: {}\n'.format(err))
         exit()
 
-    populateTable()
+    tsHostName = populateTable()
+    print('i am ts: ' + tsHostName)
     server_binding = ('', portnum())
     ss.bind(server_binding)
     ss.listen(1)
@@ -66,13 +93,14 @@ def rserver():
 
     print('Looking up DNS: ' + dns_query)
     print('IP Result: ' + lookup(dns_query))
+##
 
-    if lookup(dns_query) == dns_query:
-
-        csockid.send()
+    if lookup(dns_query) == 'none':
+        csockid.send(tsHostName)
+        print ("1")
     else:
         csockid.send(lookup(dns_query))
-
+        print ("2")
 
     # Close the server socket
     ss.close()
