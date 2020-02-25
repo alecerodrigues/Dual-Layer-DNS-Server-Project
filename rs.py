@@ -13,7 +13,7 @@ def lookup(query):
     This function takes the DNS being queried in the form of a string and checks to see if it has a corresponding value
         in the dictionary hash map
     :param query: str   -   The DNS being looked up
-    :return: str    -   The return is either the ip and flag for the corresponding DNS or the query itself to indicate
+    :return: str    -   The return is either the ip and flag for the corresponding DNS or the none to indicate
                     no match
     """
     try:
@@ -70,7 +70,7 @@ def rserver():
         exit()
 
     tsHostName = populateTable()
-    print('i am ts: ' + tsHostName)
+   # print('i am ts: ' + tsHostName)
     server_binding = ('', portnum())
     ss.bind(server_binding)
     ss.listen(1)
@@ -83,7 +83,7 @@ def rserver():
     print ("[S]: Got a connection request from a client at {}".format(addr))
 
     # send a intro message to the client.
-    msg = "Connected to RServer"
+    msg = "[RS]: Connected to RServer"
     csockid.send(msg.encode('utf-8'))
 
     # receives hostname to be queried
@@ -97,10 +97,10 @@ def rserver():
 
     if lookup(dns_query) == 'none':
         csockid.send(tsHostName)
-        print ("1")
+        print ("1") ###DEBUGGING
     else:
         csockid.send(lookup(dns_query))
-        print ("2")
+        print ("2") ###DEBUGGING
 
     # Close the server socket
     ss.close()

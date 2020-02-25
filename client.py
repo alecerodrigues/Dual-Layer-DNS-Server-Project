@@ -6,49 +6,71 @@ import sys
 
 
 def portNum():
+    """
+    This function pulls the arguments from the cmd line and populates an array with each argument.
+    :return: str[]  -   By the structure of this command it should hold, the RSHostName, the RSPort, and TSPort. In
+        that order.
+    """
     fullargs = sys.argv
     arglist = fullargs
     return arglist
 
 
 def client():
+    # Populates all necessary arguments in an array
+    args = portNum()
+
+    # Initializes the Root Server connection
     try:
-        ts = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         rs = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         print("[C]: Client socket created")
     except socket.error as err:
         print('socket open error: {} \n'.format(err))
         exit()
 
-    args = portNum()
+    # Binds the RS Port and creates the connection
+    rs_port = int(args[2])
+    rs_hostname = socket.gethostbyname(socket.gethostname()) # localhost?
+    rs_binding = (rs_hostname, rs_port)
+    rs.connect(rs_binding)
 
-    # Define the port on which you want to connect to the server
-    port1 = int(args[3])
-    localhost_addr1 = socket.gethostbyname(socket.gethostname())
-    port2 = int(args[2])
-    localhost_addr2 = socket.gethostbyname(socket.gethostname())
+    # Recieve connect confirmation from RS
+    rs_connect_conf = rs.recv(100)
+    print(rs_connect_conf.decode('utf-8'))
 
-    # connect to the server on local machine
-    server_binding1 = (localhost_addr1, port1)
-    server_binding2 = (localhost_addr2, port2)
-    ts.connect(server_binding1)
-    rs.connect(server_binding2)
+    # Send Hostname being queried to RS
+    hostname = args[1]
+    rs.sendall(hostname.encode())
+    # Receive response from RS to Client
+    rs_querry_return = rs.recv(100)
+    print("[C] Hostname Query Return: " + rs_querry_return)
+
+    # Split query return to check flag
+    #
+    #
+
+    # Execute based on flag
+    # > If A --> Resolved DNS
+    # > If NS --> Initialize TS and perform 2nd lookup
+
+    # Initializes the Top-Level Server connection
+    try:
+        ts = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        print("[C]: Client socket created")
+    except socket.error as err:
+        print('socket open error: {} \n'.format(err))
+        exit()
+
+    # Sets the TS Port
+    ts_port = int(args[3])
+    ts_hostname = socket.gethostbyname(socket.gethostname()) # localhost?
+    ts_binding = (ts_hostname, ts_port)
+    ts.connect(ts_binding)
 
     # Receive Connect from the servers
     data_from_server1 = ts.recv(100)
-    data_from_server2 = rs.recv(100)
     print("[C]: Data received from server: {}".format('\n' +
-                                                      data_from_server1.decode('utf-8') +
-                                                      '\n' +
-                                                      data_from_server2.decode('utf-8')))
-
-    # Send Host Name to RS
-    hostname = args[1]
-    rs.sendall(hostname.encode())
-
-    #Recieve response to Client
-    dataResponse = rs.recv(100)
-    print("IP address: " + dataResponse)
+                                                      data_from_server1.decode('utf-8')))
 
     # close the client socket
     ts.close()
