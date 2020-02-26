@@ -17,7 +17,7 @@ def lookup(query):
                     no match
     """
     try:
-        ip = dict[query]
+        ip = dict[query.lower()]
         return query + ' ' + ip
     except:
         return 'none'
@@ -39,7 +39,7 @@ def populateTable():
         if temp [1] == '-':
             temptsHostName = temp[0] + " - " + temp[2]
         else:
-            dict[temp[0]] = (temp[1] + ' ' + temp[2])
+            dict[temp[0].lower()] = (temp[1] + ' ' + temp[2])
 
         # except:
         #     temptsHostName = temp[0] + " - " + temp[1]
@@ -103,7 +103,7 @@ def rserver():
 
     # Close the server socket
     ss.close()
-    exit()
+    #exit()
 
 
 if __name__ == "__main__":
