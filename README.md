@@ -21,7 +21,7 @@ Port#2 --> The port the top-level server will use to communicate with the client
 
 rs Hostname --> The hostname of the device running the root server.
 
-*****IN TESTING rsHostname IS THE CURRENT QUERY*****
+*****IN TESTING rsHostname IS NON FUNCTIONAL*****
 
 -------- How to configure --------
 
