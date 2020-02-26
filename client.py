@@ -3,6 +3,7 @@ import time
 import random
 import socket
 import sys
+import os
 
 
 def portNum():
@@ -34,25 +35,38 @@ def client():
     rs_binding = (rs_hostname, rs_port)
     rs.connect(rs_binding)
 
-    # Recieve connect confirmation from RS
+    # Receive connect confirmation from RS
     rs_connect_conf = rs.recv(100)
     print(rs_connect_conf.decode('utf-8'))
 
-    # Send Hostname being queried to RS
-    hostname = args[1]
-    rs.sendall(hostname.encode())
-    # Receive response from RS to Client
-    rs_querry_return = rs.recv(100)
-    print("[C] Hostname Query Return: " + rs_querry_return)
+    # Generates the resolved hostname list
+    if os.path.exists("RESOLVED.txt"):
+        os.remove("RESOLVED.txt")
+    resolved_queries = open("RESOLVED.txt", "w")
 
-    # Split query return to check flag
-    #
-    #
+    # Generates the query list from the text file
+    query_list_file = open("PROJI-HNS.txt", "r")
+    query_list = query_list_file.readlines()
 
-    # Execute based on flag
-    # > If A --> Resolved DNS
-    # > If NS --> Initialize TS and perform 2nd lookup
+    for query in query_list:
 
+        # Send Hostname being queried to RS
+        hostname = query
+        rs.sendall(hostname.encode())
+        # Receive response from RS to Client
+        rs_query_return = rs.recv(100)
+        print("[C] Hostname Query Return: " + rs_query_return)
+
+        # Split query return to check flag
+        #
+        #
+
+        # Execute based on flag
+        # > If A --> Resolved DNS
+        # > If NS --> Initialize TS and perform 2nd lookup
+
+    end_flag = "done"
+    rs.sendall(end_flag.encode())
     # Initializes the Top-Level Server connection
     try:
         ts = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

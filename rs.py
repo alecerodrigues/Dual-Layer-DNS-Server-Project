@@ -85,22 +85,21 @@ def rserver():
     # send a intro message to the client.
     msg = "[RS]: Connected to RServer"
     csockid.send(msg.encode('utf-8'))
+    print dict
 
-    # receives hostname to be queried
-    dns_query = csockid.recv(1024)
+    dns_query = str(csockid.recv(1024)).rstrip()
+    while dns_query != 'done':
+        # receives hostname to be queried
+        print('Looking up DNS: ' + dns_query)
+        print('IP Result: ' + lookup(dns_query))
 
-##DEBUGGING
-
-    print('Looking up DNS: ' + dns_query)
-    print('IP Result: ' + lookup(dns_query))
-##
-
-    if lookup(dns_query) == 'none':
-        csockid.send(tsHostName)
-        print ("1") ###DEBUGGING
-    else:
-        csockid.send(lookup(dns_query))
-        print ("2") ###DEBUGGING
+        if lookup(dns_query) == 'none':
+            csockid.send(tsHostName)
+            print ("1") ###DEBUGGING
+        else:
+            csockid.send(lookup(dns_query))
+            print ("2") ###DEBUGGING
+        dns_query = str(csockid.recv(1024)).rstrip()
 
     # Close the server socket
     ss.close()
