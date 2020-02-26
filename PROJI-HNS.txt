@@ -1,5 +1,6 @@
-qtsdatacenter.aws.com
-mx.rutgers.edu
 kill.cs.rutgers.edu
-www.ibm.com
+mx.rutgers.com
+www.ibm.edu
+google.com
 www.google.com
+MX.RUTGERS.EDU

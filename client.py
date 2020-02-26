@@ -42,7 +42,7 @@ def client():
     # Generates the resolved hostname list
     if os.path.exists("RESOLVED.txt"):
         os.remove("RESOLVED.txt")
-    resolved_queries = open("RESOLVED.txt", "w")
+    resolved_queries = open("RESOLVED.txt", "a")
 
     # Generates the query list from the text file
     query_list_file = open("PROJI-HNS.txt", "r")
@@ -58,8 +58,9 @@ def client():
         print("[C] Hostname Query Return: " + rs_query_return)
 
         # Split query return to check flag
-        #
-        #
+        split_rs = rs_query_return.split()
+        if split_rs[2] == 'A':
+            resolved_queries.write(rs_query_return + '\n')
 
         # Execute based on flag
         # > If A --> Resolved DNS
