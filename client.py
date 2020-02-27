@@ -31,7 +31,7 @@ def client():
 
     # Binds the RS Port and creates the connection
     rs_port = int(args[2])
-    rs_hostname = args[1]  # localhost?
+    rs_hostname = args[1]  # localhost for self
     rs_binding = (rs_hostname, rs_port)
     rs.connect(rs_binding)
 
@@ -59,7 +59,6 @@ def client():
         rs.sendall(hostname.encode())
         # Receive response from RS to Client
         rs_query_return = rs.recv(100)
-        print("[C] Hostname Query Return: " + rs_query_return)
 
         # Split query return to check flag
         split_rs = rs_query_return.split()
@@ -102,8 +101,6 @@ def client():
         ts.sendall(hostname.encode())
         # Recieve Response from RS to Client
         ts_query_return = ts.recv(100)
-        print("[C] Hostname Query Return: " + ts_query_return)
-        
         resolved_queries.write(ts_query_return + '\n')
 
     ts.sendall(end_flag.encode())
@@ -120,4 +117,4 @@ if __name__ == "__main__":
     t2.start()
 
     time.sleep(5)
-    print("Done.")
+    print("Done. Output in RESOLVED.txt")
