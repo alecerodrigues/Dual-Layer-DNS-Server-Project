@@ -35,15 +35,10 @@ def populateTable():
     temptsHostName = ""
     for i in dnstable:
         temp = i.split()
-        # try:
         if temp [1] == '-':
             temptsHostName = temp[0] + " - " + temp[2]
         else:
             dict[temp[0].lower()] = (temp[1] + ' ' + temp[2])
-
-        # except:
-        #     temptsHostName = temp[0] + " - " + temp[1]
-        #     dict[temp[0]] = (temp[1])
     return temptsHostName
 
 
@@ -71,9 +66,7 @@ def rserver():
         exit()
 
     tsHostName = populateTable()
-    #print('i am ts: ' + tsHostName)
     server_binding = ('', portnum())
-
     ss.bind(server_binding)
     ss.listen(1)
     host = socket.gethostname()
@@ -87,25 +80,17 @@ def rserver():
     # send a intro message to the client.
     msg = "[RS]: Connected to RServer"
     csockid.send(msg.encode('utf-8'))
-    print(dict)
-
     dns_query = str(csockid.recv(1024)).rstrip()
     while dns_query != 'done':
         # receives hostname to be queried
-        print('Looking up DNS: ' + dns_query)
-        print('IP Result: ' + lookup(dns_query))
-
         if lookup(dns_query) == 'none':
             csockid.send(tsHostName)
-            print ("1") ###DEBUGGING
         else:
             csockid.send(lookup(dns_query))
-            print ("2") ###DEBUGGING
         dns_query = str(csockid.recv(1024)).rstrip()
 
     # Close the server socket
     ss.close()
-    #exit()
 
 
 if __name__ == "__main__":
