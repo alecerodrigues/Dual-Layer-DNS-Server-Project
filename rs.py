@@ -54,6 +54,7 @@ def portnum():
     """
     fullargs = sys.argv
     arglist = fullargs[1]
+
     return int(arglist)
 
 
@@ -70,8 +71,9 @@ def rserver():
         exit()
 
     tsHostName = populateTable()
-   # print('i am ts: ' + tsHostName)
+    #print('i am ts: ' + tsHostName)
     server_binding = ('', portnum())
+
     ss.bind(server_binding)
     ss.listen(1)
     host = socket.gethostname()
@@ -85,7 +87,7 @@ def rserver():
     # send a intro message to the client.
     msg = "[RS]: Connected to RServer"
     csockid.send(msg.encode('utf-8'))
-    print dict
+    print(dict)
 
     dns_query = str(csockid.recv(1024)).rstrip()
     while dns_query != 'done':

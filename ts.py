@@ -10,22 +10,21 @@ dict = {}
 def lookup(query):
 
     try:
-        ip = dict[query]
-        return ip
+        ip = dict[query.lower()]
+        return query + ' ' + ip
     except:
-        return query + ' - NS'
+        return 'none'
 
 
 def populateTable():
 
     dnstablefile = open("PROJI-DNSTS.txt", "r")
     dnstable = dnstablefile.readlines()
+
     for i in dnstable:
         temp = i.split()
-        try:
-            dict[temp[0]] = (temp[1] + ' ' + temp[2])
-        except:
-            dict[temp[0]] = (temp[1])
+
+        dict[temp[0].lower()] = (temp[1] + ' ' + temp[2])
     return
 
 
@@ -43,10 +42,12 @@ def tserver():
     except socket.error as err:
         print('socket open error: {}\n'.format(err))
         exit()
+
     populateTable()
     server_binding = ('', portNum())
     ss.bind(server_binding)
     ss.listen(1)
+
     host = socket.gethostname()
     print("[S]: Server host name is {}".format(host))
     ##print(lookup('bleh'))
@@ -59,7 +60,22 @@ def tserver():
     # send a intro message to the client.
     msg = "Connected to TServer"
     csockid.send(msg.encode('utf-8'))
+    print(dict)
 
+    dns_query = str(csockid.recv(1024)).rstrip()
+    while dns_query != 'done':
+        # receives hostname to be queried
+        print('Looking up DNS: ' + dns_query)
+        print('IP Result: ' + lookup(dns_query))
+
+        if lookup(dns_query) == 'none':
+            csockid.send(dns_query + ' - Error:HOST NOT FOUND')
+            print ("1") ###DEBUGGING
+        else:
+            csockid.send(lookup(dns_query))
+            print ("2") ###DEBUGGING
+
+        dns_query = str(csockid.recv(1024)).rstrip()
 
     # Close the server socket
     ss.close()
