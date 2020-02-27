@@ -53,6 +53,7 @@ def tserver():
     ##print(lookup('bleh'))
     localhost_ip = (socket.gethostbyname(host))
     print("[S]: Server IP address is {}".format(localhost_ip))
+
     csockid, addr = ss.accept()
 
     print ("[S]: Got a connection request from a client at {}".format(addr))

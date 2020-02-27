@@ -31,7 +31,7 @@ def client():
 
     # Binds the RS Port and creates the connection
     rs_port = int(args[2])
-    rs_hostname = socket.gethostbyname(socket.gethostname()) # localhost?
+    rs_hostname = args[1]  # localhost?
     rs_binding = (rs_hostname, rs_port)
     rs.connect(rs_binding)
 
