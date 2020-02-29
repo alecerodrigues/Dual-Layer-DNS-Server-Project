@@ -28,7 +28,7 @@ _________________________________________
 
 3. Issues in Development
 
-Testing was an issue I had when developing this project. I had to set up some specific commands in my IDE before I could start testing properly. Also, since we are developing on an older version of Python, some of the information I found online didn't apply to my Python version. Learning/testing Python sockets was also a little bit of a challenge as well, due to some of the restrictions on the Rutgers networks. I found that I was not able to communicate with rs.py and ts.py hosted on my desktop and running the client from my laptop. In order connect and test the sockets, I had to create a mobile hotspot on my cellular device and connect my laptop and desktop to it. From there I experienced no issues in testing and was able to successfully communicate between devices.
+Testing was an issue we had when developing this project. We had to set up some specific commands in our IDEs before we could start testing properly. Also, since we are developing on an older version of Python, some of the information we found online didn't apply to our Python version. Learning/testing Python sockets was also a little bit of a challenge as well, due to some of the restrictions on the Rutgers networks. We found that we were not able to communicate with rs.py and ts.py hosted on one desktop and running the client from a laptop. In order connect and test the sockets, we had to create a mobile hotspot on a cellular device and connect the laptop and desktop to it. From there we experienced no issues in testing and was able to successfully communicate between devices.
 
 _________________________________________
 
